@@ -1,0 +1,100 @@
+Cuisine:
+    *Food1
+        *Directions
+    *Food2
+        *Directions
+    *Food3
+        *Directions
+    *Food4
+        *Directions
+
+======================================================
+
+Soul Food (https://en.wikipedia.org/wiki/Soul_food)  (African-American) (Distinct from African/Carribean)
+    * Hoppin' John (https://en.wikipedia.org/wiki/Hoppin%27_John)
+    * Gumbo (https://en.wikipedia.org/wiki/Gumbo)
+    * Sweet Potato Pie (https://en.wikipedia.org/wiki/Sweet_potato_pie)
+    * Jambalaya (https://en.wikipedia.org/wiki/Jambalaya)
+
+Italian (https://en.wikipedia.org/wiki/Italian_cuisine) (Spicy European/white) (Technicallly subtype of Mediterranean)
+    * Spaghetti and Meatballs
+    * Pizza
+    * Knödel (https://en.wikipedia.org/wiki/Kn%C3%B6del)
+    * Olive all'ascolana (https://en.wikipedia.org/wiki/Olive_all%27ascolana)
+
+Japanese (https://en.wikipedia.org/wiki/Japanese_cuisine) (...Japanese?) (Tons in common with other east asian types)
+    * Red bean rice (https://en.wikipedia.org/wiki/Red_bean_rice)
+    * Zongzi/Chimaki (https://en.wikipedia.org/wiki/Zongzi)
+    * Tentsuyu Soup (https://en.wikipedia.org/wiki/Tentsuyu)
+    * Curry Bread (https://en.wikipedia.org/wiki/Curry_bread)
+
+Directions (??????) (Seriously ??????)
+
+======================================================
+
+Cuisine properties:
+    * Region
+    * Culture
+    * Spicyness
+    * Common ingredients [Array] ?
+    * Famous Dishes [Array] ?
+    * portion size (small, large, medium) 
+    * serving style (family style, appetizer then main course then dessert, family style)
+    * Staple_foods [Array] ?
+    * category/broad_cuisine (Medditeranian, African Diaspora, East Asian)
+    * 
+
+
+Recipe Properties:
+    *main_ingredients [array] ?
+    *ingredient_types [Array] [Meat, vegetable, drink, soup, pastry]
+    *food_category (solid food/comestible/victuals, beverage, soup)
+    *food_course (appetizer, entree, dessert, snack)
+    *serving_temperature (Hot, cold, warm)
+    *diet_preference [Array] [Halal, Vegan, Keto, low fat, high protein, none] (Try required: false here)
+    *Image URL
+
+Directions Properties: (????????? What do I put here)
+
+    * unit_system [Metric or Imperial] (Not required if I do the object in object stuff)
+    * solid_measurement: [Cups, tsp, tbsp, grams, oz, lbs]
+    * liquid_measurement: [Cups, tsp, tbsp, ml, oz]
+    * Directions_strings_per_ingredient
+        (Consider trying to make this a sub document)
+        {ingredient1: 'Just put it in the microwave'}
+        {ingredient2: 'Just chop it up'}
+        {ingredient3: 'Just uber it lol'}
+        {ingredient4: 'Ask your wife to do it, pray to god she says yes'}
+    (also consider)
+    * amount_per_ingredient
+        (Consider trying to make this a sub document) 
+        (Maybe make an object within and object to specify each measurement) 
+        (response.data.soulfood.jambalaya.directions.amounts.chicken.grams)
+        {ingredient1: 'Like 12 handfuls'}
+        {ingredient2: 'However much you feel like'}
+        {ingredient3: 'Just uber it lol'}
+        {ingredient4: 'Ask your wife to do it, pray to god she says yes'}
+
+You will write out the cuisine properties yourself...
+Finally:
+    when you make ONE json object for each cuisine, and directions for it,
+    tell ChatGPT to do the rest for you. You ain't writing allah-dat!
+
+IMPORTANT
+
+Figure out how to get data OTHER THAN USING ID
+    *Consider "Get all halal meals (diet_preference)" or "Get all Japanese foods" or "Search by name" or "Search by ingredient" or "Search by serving temp"
+
+Must figure out how to Embed data in a sub document
+
+CONSIDER USING THUNDERCLIENT to populate my data, instead of a seed file. Just seed the Cuisine types? But make schema for everything
+
+ALSO! If you mess up your database, you can always delete it off AtlasDB then reseed!
+
+https://mongoosejs.com/docs/subdocs.html
+
+Boilerplate lesson links
+
+https://github.com/SEBR-0916/u2_lesson_mongoose_intro
+https://github.com/SEBR-0916/u2_mongoose_employees_lab?tab=readme-ov-file
+https://github.com/ShirtHanger/u2_zoo_api
