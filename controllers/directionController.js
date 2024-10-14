@@ -12,6 +12,7 @@ const getAllDirections = async (req, res) => {
         return res.status(500).send(error.message)
     }
 }
+
 // SHOW - app.get
 getDirectionById = async (req, res) => {
     try {
@@ -66,10 +67,48 @@ const deleteDirection = async (req, res) => {
     }
 }
 
+/* =================================
+
+Here are the functions I made myself, as alternate search methods
+
+====================================
+
+*/
+
+/* Searches all recipe instructions by its author */
+
+// http://localhost:3001/directions/author-search/ShirtHanger
+
+getDirectionAuthorSearch = async (req, res) => {
+    try {
+        const userSearch = req.params.userSearch.toLowerCase()
+        const directions = await Direction.find()
+        let output = []
+
+        for (direction of directions) {
+            if (direction.author.toLowerCase().includes(userSearch) 
+                || direction.source_url.toLowerCase().includes(userSearch)) {
+                output.push(direction)
+            } 
+        }
+
+        if (output) {
+            return res.json(output)
+        } return res.status(404).send(`No results for "${userSearch}" in Directions!`)
+    } catch (error) {
+        if (error.name === 'CastError' && error.kind === 'ObjectId') {
+            return res.status(404).send(`That direction doesn't exist`)
+        }
+        return res.status(500).send(error.message)
+    }
+}
+
 module.exports = {
     getAllDirections,
     getDirectionById,
     createDirection,
     updateDirection,
-    deleteDirection
+    deleteDirection,
+
+    getDirectionAuthorSearch
 }

@@ -50,6 +50,8 @@ app.get('/', (req, res)=> { // request and response arguements
 app.get('/cuisines', cuisineController.getAllCuisines)
 // SHOW - app.get
 app.get('/cuisines/:id', cuisineController.getCuisineById)
+app.get('/cuisines/name-search/:userSearch', cuisineController.getCuisineNameSearch)
+app.get('/cuisines/detail-search/:userSearch', cuisineController.getCuisineDetailSearch)
 // CREATE - app.post
 
 app.post('/cuisines', cuisineController.createCuisine) 
@@ -66,6 +68,8 @@ app.delete('/cuisines/:id', cuisineController.deleteCuisine)
 app.get('/recipes', recipeController.getAllRecipes)
 // SHOW - app.get
 app.get('/recipes/:id', recipeController.getRecipeById)
+app.get('/recipes/name-search/:userSearch', recipeController.getRecipeNameSearch)
+app.get('/recipes/detail-search/:userSearch', recipeController.getRecipeDetailSearch)
 // CREATE - app.post
 
 app.post('/recipes', recipeController.createRecipe) 
@@ -82,6 +86,7 @@ app.delete('/recipes/:id', recipeController.deleteRecipe)
 app.get('/directions', directionController.getAllDirections)
 // SHOW - app.get
 app.get('/directions/:id', directionController.getDirectionById)
+app.get('/directions/author-search/:userSearch', directionController.getDirectionAuthorSearch)
 // CREATE - app.post
 
 app.post('/directions', directionController.createDirection) 

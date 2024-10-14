@@ -66,10 +66,85 @@ const deleteRecipe = async (req, res) => {
     }
 }
 
+
+
+/* Returns every recipe that contains text in recipe_name variable 
+("Rice" will return Red Bean Rice) */
+
+// http://localhost:3001/recipes/name-search/:userSearch
+
+getRecipeNameSearch = async (req, res) => {
+    try {
+        const userSearch = req.params.userSearch.toLowerCase()
+        const recipes = await Recipe.find()
+        let output = []
+
+        for (recipe of recipes) {
+
+            if (recipe.recipe_name.toLowerCase().includes(userSearch)) {
+                output.push(recipe)
+            } 
+        }
+
+        if (output) {
+            return res.json(output)
+        } return res.status(404).send(`No results for "${userSearch}" in Recipes!`)
+    } catch (error) {
+        if (error.name === 'CastError' && error.kind === 'ObjectId') {
+            return res.status(404).send(`That recipe doesn't exist`)
+        }
+        return res.status(500).send(error.message)
+    }
+}
+
+/* Same as above but includes contents of ingredients array, as well as description
+("Rice" will return Hoppin John, Jambayala, Zongzi/Chimaki, and Red Bean Rice) */
+
+getRecipeDetailSearch = async (req, res) => {
+    try {
+        const userSearch = req.params.userSearch.toLowerCase()
+        const recipes = await Recipe.find()
+        let output = []
+        let simpleingredientArray = []
+
+
+        for (recipe of recipes) {
+
+            let ingredients = recipe.main_ingredients
+
+            for (ingredient of ingredients) {
+                ingredient.name = ingredient.name.toLowerCase()
+                simpleingredientArray.push(ingredient.name)
+            }
+
+
+
+
+            if (recipe.recipe_name.toLowerCase().includes(userSearch) 
+                || recipe.description.toLowerCase().includes(userSearch)
+                || simpleingredientArray.some(ingredient => ingredient.includes(userSearch))) {
+                output.push(recipe)
+            } 
+        }
+
+        if (output) {
+            return res.json(output)
+        } return res.status(404).send(`No results for "${userSearch}" in Recipes!`)
+    } catch (error) {
+        if (error.name === 'CastError' && error.kind === 'ObjectId') {
+            return res.status(404).send(`That recipe doesn't exist`)
+        }
+        return res.status(500).send(error.message)
+    }
+}
+
 module.exports = {
     getAllRecipes,
     getRecipeById,
     createRecipe,
     updateRecipe,
-    deleteRecipe
+    deleteRecipe,
+
+    getRecipeNameSearch,
+    getRecipeDetailSearch
 }

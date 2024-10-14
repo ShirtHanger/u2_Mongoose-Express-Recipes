@@ -4,6 +4,7 @@
 // const Cuisine = require('../models/cuisine');
 
 const { Direction, Recipe, Cuisine } = require('../models')
+const { addListener } = require('../models/direction')
 
 // INDEX - app.get
 const getAllCuisines = async (req, res) => {
@@ -30,6 +31,8 @@ getCuisineById = async (req, res) => {
         return res.status(500).send(error.message)
     }
 }
+
+/* ================== */
 
 // CREATE - app.post
 const createCuisine = async (req, res) => {
@@ -69,10 +72,95 @@ const deleteCuisine = async (req, res) => {
     }
 }
 
+/* =================================
+
+Here are the functions I made myself, as alternate search methods
+
+====================================
+
+*/
+
+/* Returns every cuisine that matches the name/culture/region from search Result 
+("Soul" will return "Soul Food") */
+
+// http://localhost:3001/cuisines/name-search/:userSearch
+
+getCuisineNameSearch = async (req, res) => {
+    try {
+        const userSearch = req.params.userSearch.toLowerCase()
+        const cuisines = await Cuisine.find()
+        let output = []
+
+        for (cuisine of cuisines) {
+            if (cuisine.cuisine_name.toLowerCase().includes(userSearch)) {
+                output.push(cuisine)
+            } 
+        }
+
+        if (output) {
+            return res.json(output)
+        } return res.status(404).send(`No results for "${userSearch}" in Cuisines!`)
+    } catch (error) {
+        if (error.name === 'CastError' && error.kind === 'ObjectId') {
+            return res.status(404).send(`That cuisine doesn't exist`)
+        }
+        return res.status(500).send(error.message)
+    }
+}
+
+/* Same as above but includes contents of culture and region array, as well as description
+("Afri" will return Soul Food and Jamacian) */
+
+getCuisineDetailSearch = async (req, res) => {
+    try {
+        const userSearch = req.params.userSearch.toLowerCase()
+        const cuisines = await Cuisine.find()
+        let output = []
+
+        for (cuisine of cuisines) {
+
+            /* Took me a while to realize I had to redefine INSIDE of the loop */
+
+            /* Forced myself to figure out .map for this specifically :( */
+
+            /* This creates new array in lowercase, for proper searches within array */
+
+            let cultures = cuisine.cultures.map(culture => 
+                culture.toLowerCase())
+            let regions = cuisine.regions.map(region => 
+                region.toLowerCase())
+
+
+                /* Asked ChatGPT how to make partial searches in arrays return "True" */
+                /* .some will return true even if the string is not EXACT, which is what I want */
+                /* This is how that Superhero API worked */
+
+            if (cuisine.cuisine_name.toLowerCase().includes(userSearch) 
+                || cultures.some(culture => culture.includes(userSearch))
+                || regions.some(culture => culture.includes(userSearch))) {
+                output.push(cuisine)
+            } 
+        }
+
+        if (output) {
+            return res.json(output)
+        } return res.status(404).send(`No results for "${userSearch}" in Cuisines!`)
+    } catch (error) {
+        if (error.name === 'CastError' && error.kind === 'ObjectId') {
+            return res.status(404).send(`That cuisine doesn't exist`)
+        }
+        return res.status(500).send(error.message)
+    }
+}
+
+
 module.exports = {
     getAllCuisines,
     getCuisineById,
     createCuisine,
     updateCuisine,
-    deleteCuisine
+    deleteCuisine,
+    
+    getCuisineNameSearch,
+    getCuisineDetailSearch
 }
